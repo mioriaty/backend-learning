@@ -1,24 +1,31 @@
+/* eslint-disable no-console */
+import 'dotenv/config';
 import express from 'express';
-import { mapOrder } from '~/utils/sorts';
+import { APP_HOST, APP_PORT } from '~/configs/constants';
+import { CONNECT_DB, GET_DB } from '~/configs/mongodb';
 
-const app = express();
-const hostname = 'localhost';
-const port = 3000;
+const START_SERVER = () => {
+  const app = express();
+  const hostname = APP_HOST;
+  const port = APP_PORT;
 
-app.get('/', (req, res) => {
-  console.log(mapOrder(
-    [{ id: 'id-1', name: 'One' },
-      { id: 'id-2', name: 'Two' },
-      { id: 'id-3', name: 'Three' },
-      { id: 'id-4', name: 'Four' },
-      { id: 'id-5', name: 'Five' }],
-    ['id-5', 'id-4', 'id-2', 'id-3', 'id-1'],
-    'id'
-  ))
-  res.send('Hello World!');
-});
+  app.get('/', async (req, res) => {
+    console.log(await GET_DB().listCollections().toArray());
+    res.send('<h1>Hello World!</h1>');
+  });
 
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+  app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+  });
+
+}
+CONNECT_DB()
+  .then(() => {
+    console.log('Connected to MongoDB');
+  }).then(() => {
+    START_SERVER();
+  }).catch((err) => {
+    console.error(err);
+    process.exit(0);
+  })
