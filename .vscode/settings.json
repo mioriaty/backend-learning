@@ -8,8 +8,8 @@
     "**/node_modules": true
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll": "explicit",
-    "source.organizeImports": "explicit"
+    "source.fixAll.eslint": "always",
+    "source.fixAll": "always",
+    "source.organizeImports": "always"
   },
 }
