@@ -10,6 +10,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always",
     "source.fixAll": "always",
-    "source.organizeImports": "always"
+    "source.organizeImports": "never"
   },
 }

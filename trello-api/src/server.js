@@ -5,15 +5,19 @@ import express from 'express';
 import { env } from '~/configs/environment';
 import { mongoDBConnection } from '~/configs/mongodb';
 import { APIs_V1 } from './routes/v1';
+import { errorHandlingMiddleware } from './middlewares/error.middleware';
 
 const START_SERVER = () => {
   const app = express();
 
-  app.use(APIs_V1);
+  // Enable json body parser
+  app.use(express.json());
 
-  app.get('/', async (req, res) => {
-    res.send('<h1>Hello World!</h1>');
-  });
+  // Use api v1
+  app.use('/v1', APIs_V1);
+
+  // Toàn bộ next(error) sẽ được xử lý ở middleware error xử lý lỗi tập trung
+  app.use(errorHandlingMiddleware);
 
   app.listen(env.APP_PORT, env.APP_HOST, () => {
     console.log(`Server running at http://${env.APP_HOST}:${env.APP_PORT}/`);
