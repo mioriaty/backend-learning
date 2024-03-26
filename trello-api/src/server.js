@@ -2,14 +2,16 @@
 import exitHook from 'async-exit-hook';
 import 'dotenv/config';
 import express from 'express';
-import { env } from './configs/environment';
-import { mongoDBConnection } from './configs/mongodb';
+import { env } from '~/configs/environment';
+import { mongoDBConnection } from '~/configs/mongodb';
+import { APIs_V1 } from './routes/v1';
 
 const START_SERVER = () => {
   const app = express();
 
+  app.use(APIs_V1);
+
   app.get('/', async (req, res) => {
-    console.log(await mongoDBConnection.getDb().listCollections().toArray());
     res.send('<h1>Hello World!</h1>');
   });
 
@@ -20,9 +22,10 @@ const START_SERVER = () => {
   // Clean up trước khi shutdown server
   exitHook(async () => {
     console.log('Server is shutting down');
-    await mongoDBConnection.disconnect()
-  })
-}
+    await mongoDBConnection.disconnect();
+    console.log('Disconnected from MongoDB');
+  });
+};
 
 // Chỉ khi kết nối tới database thành công thì mới khởi tạo server
 (async function () {
@@ -34,4 +37,4 @@ const START_SERVER = () => {
     console.error(error);
     process.exit(0);
   }
-})()
+})();
