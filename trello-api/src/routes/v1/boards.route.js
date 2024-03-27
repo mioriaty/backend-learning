@@ -5,13 +5,14 @@ import { boardsValidation } from '~/validations/boards.validation';
 
 const Router = express.Router();
 
-/** /boards */
+// get all + create
 Router.route('/')
-  .get((req, res) => {
-    res.status(StatusCodes.OK).json({
-      message: 'API get list of boards'
-    });
-  })
+  .get(boardsController.getAllBoards)
   .post(boardsValidation.createBoardValidation, boardsController.createNew);
+
+// get one + update
+Router.route('/:id')
+  .get(boardsController.getBoardDetail)
+  .put();
 
 export const boardRoutes = Router;
