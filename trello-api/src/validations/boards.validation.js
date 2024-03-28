@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { StatusCodes } from 'http-status-codes';
+import { BOARD_TYPES } from '~/utils/constants';
 
 /**
  * @typedef {import('express').Request} Request
@@ -26,6 +27,11 @@ const createBoardValidation = async (req, res, next) => {
       'string.min': 'Description must be at least 5 characters',
       'string.max': 'Description must be at most 256 characters',
       'string.trim': 'Description must not have leading or trailing whitespace'
+    }),
+    type: Joi.string().required().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE).messages({
+      'any.required': 'Type is required',
+      'string.empty': 'Type is required',
+      'any.only': 'Type must be either public or private'
     })
   });
 

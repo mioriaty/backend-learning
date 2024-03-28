@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
+import { transformReturnResponse } from '~/helpers/transformReturnResponse';
 import { boardsService } from '~/services/boards.service';
 
 /**
@@ -16,7 +17,11 @@ const createNew = async (req, res, next) => {
     const createdBoard= await boardsService.createNew(req.body);
 
     // Có kết quả thì trả về cho client
-    res.status(StatusCodes.CREATED).json(createdBoard);
+    res.status(StatusCodes.CREATED).json(transformReturnResponse({
+      data: createdBoard,
+      message: 'Created new board successfully',
+      status: StatusCodes.CREATED
+    }));
   } catch (error) {
     next(error);
   }
@@ -33,7 +38,11 @@ const getBoardDetail = async (req, res, next) => {
     const board= await boardsService.getBoardDetail(boardId);
 
     // Có kết quả thì trả về cho client
-    res.status(StatusCodes.OK).json(board);
+    res.status(StatusCodes.OK).json(transformReturnResponse({
+      data: board,
+      message: 'Get board detail successfully',
+      status: StatusCodes.OK
+    }));
   } catch (error) {
     next(error);
   }
@@ -45,7 +54,11 @@ const getAllBoards = async (req, res, next) => {
     const boards = await boardsService.getAllBoards();
 
     // Có kết quả thì trả về cho client
-    res.status(StatusCodes.OK).json(boards);
+    res.status(StatusCodes.OK).json(transformReturnResponse({
+      data: boards,
+      message: 'Get all boards successfully',
+      status: StatusCodes.OK
+    }));
   } catch (error) {
     next(error);
   }

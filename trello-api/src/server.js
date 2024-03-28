@@ -6,9 +6,14 @@ import { env } from '~/configs/environment';
 import { mongoDBConnection } from '~/configs/mongodb';
 import { APIs_V1 } from './routes/v1';
 import { errorHandlingMiddleware } from './middlewares/error.middleware';
+import cors from 'cors';
+import { corsOptions } from './configs/cors';
 
 const START_SERVER = () => {
   const app = express();
+
+  // Enable cors
+  app.use(cors(corsOptions));
 
   // Enable json body parser
   app.use(express.json());

@@ -1,5 +1,4 @@
 import express from 'express';
-import { StatusCodes } from 'http-status-codes';
 import { boardsController } from '~/controllers/boards.controller';
 import { boardsValidation } from '~/validations/boards.validation';
 
@@ -10,9 +9,10 @@ Router.route('/')
   .get(boardsController.getAllBoards)
   .post(boardsValidation.createBoardValidation, boardsController.createNew);
 
-// get one + update
+// get one + update + delete
 Router.route('/:id')
   .get(boardsController.getBoardDetail)
-  .put();
+  .put()
+  .delete();
 
 export const boardRoutes = Router;

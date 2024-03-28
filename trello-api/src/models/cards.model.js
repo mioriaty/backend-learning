@@ -17,7 +17,7 @@ const CARD_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false)
 });
 
-export const cardModel = {
+export const cardsModel = {
   CARD_COLLECTION_NAME,
   CARD_COLLECTION_SCHEMA
 };

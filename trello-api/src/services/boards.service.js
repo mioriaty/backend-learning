@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { boardsModel } from '~/models/boards.model';
 import ApiError from '~/utils/apiError';
 import { slugify } from '~/utils/slugify';
+import { cloneDeep } from 'lodash';
 
 /**
  * @typedef {Object} ReqBody
@@ -40,8 +41,20 @@ const getBoardDetail = async (boardId) => {
     if (!foundBoard) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found');
     }
+    const transformedResponseBoard = cloneDeep(foundBoard);
 
-    return foundBoard;
+    // map cards into column by columnId
+    transformedResponseBoard.columns.forEach(column => {
+      // Cách dùng .equals() này là bởi vì chúng mongo support hàm equals() cho ObjectId
+      column.cards = transformedResponseBoard.cards.filter(card => card.columnId.equals(column._id));
+
+      // or use toString() of js to convert ObjectId to string
+      // column.cards = transformedResponseBoard.cards.filter(card => card.columnId.toString() === column._id.toString());
+    });
+
+    delete transformedResponseBoard.cards;
+
+    return transformedResponseBoard;
   } catch (error) {
     throw error;
   }
